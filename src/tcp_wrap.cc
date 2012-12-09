@@ -108,6 +108,7 @@ void TCPWrap::Initialize(Handle<Object> target) {
   NODE_SET_PROTOTYPE_METHOD(t, "bind", Bind);
   NODE_SET_PROTOTYPE_METHOD(t, "listen", Listen);
   NODE_SET_PROTOTYPE_METHOD(t, "connect", Connect);
+  NODE_SET_PROTOTYPE_METHOD(t, "open", Open);
   NODE_SET_PROTOTYPE_METHOD(t, "bind6", Bind6);
   NODE_SET_PROTOTYPE_METHOD(t, "connect6", Connect6);
   NODE_SET_PROTOTYPE_METHOD(t, "getsockname", GetSockName);
@@ -399,6 +400,22 @@ Handle<Value> TCPWrap::Connect(const Arguments& args) {
     return scope.Close(req_wrap->object_);
   }
 }
+
+Handle<Value> TCPWrap::Open(const Arguments& args) {
+  HandleScope scope;
+
+  UNWRAP(TCPWrap)
+
+  int fd = args[0]->IntegerValue();
+
+  int r = uv_tcp_open(&wrap->handle_, fd);
+
+  // Error starting the tcp.
+  if (r) SetErrno(uv_last_error(uv_default_loop()));
+
+  return scope.Close(Integer::New(r));
+}
+
 
 
 Handle<Value> TCPWrap::Connect6(const Arguments& args) {
