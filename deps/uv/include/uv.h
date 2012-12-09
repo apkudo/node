@@ -584,6 +584,13 @@ struct uv_tcp_s {
 
 UV_EXTERN int uv_tcp_init(uv_loop_t*, uv_tcp_t* handle);
 
+/*
+ * Associate an existing socket fd with an existing handle.
+ *
+ * NOTE: This functionality is only available on UNIX.
+ */
+UV_EXTERN int uv_tcp_open(uv_tcp_t*, uv_file file);
+
 /* Enable/disable Nagle's algorithm. */
 UV_EXTERN int uv_tcp_nodelay(uv_tcp_t* handle, int enable);
 

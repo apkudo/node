@@ -34,6 +34,12 @@ int uv_tcp_init(uv_loop_t* loop, uv_tcp_t* tcp) {
 }
 
 
+int uv_tcp_open(uv_tcp_t* tcp, uv_file fd) {
+  return uv__stream_open((uv_stream_t*)tcp, fd,
+                         UV_STREAM_READABLE | UV_STREAM_WRITABLE);
+}
+
+
 static int maybe_new_socket(uv_tcp_t* handle, int domain, int flags) {
   int sockfd;
 
