@@ -131,11 +131,22 @@ uv_handle_type uv_guess_handle(uv_file file) {
     return UV_UNKNOWN_HANDLE;
   }
 
-  if (!S_ISSOCK(s.st_mode) && !S_ISFIFO(s.st_mode)) {
+  if (S_ISSOCK(s.st_mode)) {
+      /* FIXME: A socket may also be UV_UDP, ideally we would
+         determine this programmatically, although since
+         this is just a guess, it will suffice. */
+      return UV_TCP;
+  }
+
+  if (S_ISFIFO(s.st_mode)) {
+      return UV_NAMED_PIPE;
+  }
+
+  if (S_ISREG(s.st_mode)) {
     return UV_FILE;
   }
 
-  return UV_NAMED_PIPE;
+  return UV_UNKNOWN_HANDLE;
 }
 
 
