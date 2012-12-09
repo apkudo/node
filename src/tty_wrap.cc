@@ -101,6 +101,9 @@ Handle<Value> TTYWrap::GuessHandleType(const Arguments& args) {
     case UV_NAMED_PIPE:
       return scope.Close(String::New("PIPE"));
 
+    case UV_TCP:
+      return scope.Close(String::New("TCP"));
+
     case UV_FILE:
       return scope.Close(String::New("FILE"));
 
